@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: rgb(245,245,245);
 }
 
 code {
@@ -52,7 +53,7 @@ input[type=file] {
   /* We invert order of first sidebar and main
    * And tell the main element to take twice as much width as the other two sidebars 
    */
-  .main { flex: 2 0px; }
+  .main { flex: 8 0px; }
   .listings { order: 1; }
   .main    { order: 2; }
   .footer  { order: 3; }
