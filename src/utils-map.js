@@ -2,13 +2,13 @@ import * as MapboxGL from 'mapbox-gl';
 import { getResponseHeaders } from './utils-data';
 import { token } from './config.json';
 
-export const createMap = async (stores) => {
+export const createMap = async (stores, map) => {
     try {
         MapboxGL.accessToken = token;
 		// This adds the map to your page
 		return new MapboxGL.Map({
 			// container id specified in the HTML
-			container: 'map',
+			container: map,
 			// style URL
 			style: 'mapbox://styles/westonbluekeel/cjzvf1cl413ms1cn7yuamnbyn',
 			// initial position in [lon, lat] format
@@ -63,6 +63,7 @@ export const createPopUp = (currentFeature, map) => {
 };
 
 export const addMapClicks = (map, stores) => {
+	console.log('adding click events to map');
 	// Add an event listener for when a user clicks on the map
 	map.on('click', function(e) {
 		// Query all the rendered points in the view
@@ -97,24 +98,24 @@ export const addMapClicks = (map, stores) => {
 	});
 };
 
-export const loadMap = (map, stores) => {
-	map.on('load', function(e) {
-		// Add the data to the map as a layer
-		map.addSource('stores', {
-			type: 'geojson',
-			data: stores
-		});
-		map.addLayer({
-			id: 'locations',
-			type: 'symbol',
-			source: {
-				type: 'geojson',
-				data: 'stores'
-			},
-			layout: {
-				'icon-image': 'embassy-15',
-				'icon-allow-overlap': true
-			}
-		});
-	});
-};
+// export const loadMap = (map, stores) => {
+// 	map.on('load', function(e) {
+// 		// Add the data to the map as a layer
+// 		map.addSource('stores', {
+// 			type: 'geojson',
+// 			data: stores
+// 		});
+// 		map.addLayer({
+// 			id: 'locations',
+// 			type: 'symbol',
+// 			source: {
+// 				type: 'geojson',
+// 				data: 'stores'
+// 			},
+// 			layout: {
+// 				'icon-image': 'embassy-15',
+// 				'icon-allow-overlap': true
+// 			}
+// 		});
+// 	});
+// };
