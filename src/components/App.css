@@ -23,13 +23,28 @@ body {
   padding: 10px;
 }
 
+#logo-img {
+  padding: 10px;
+  float: right;
+  margin-right: 5%
+}
+
 .searchbar-div {
-  padding: 20px;
+  padding: 5px 0;
   border-bottom: 1px solid rgb(34,168,158);
+  border-top: 1px solid rgb(34,168,158);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mr-sm-2 {
+  margin: 10px;
 }
 
 #searchButton {
-  margin-left: 5%;
+  align-self: center;
+  /* margin: 5%; */
   border: 1px solid rgb(34,168,158);
 }
 

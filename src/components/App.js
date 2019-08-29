@@ -29,17 +29,17 @@ class App extends Component {
 	};
 
 	render() {
-		const { stores, map } = this.state;
+		let { stores, map } = this.state;
 
 		return (
 			<div class="App wrapper">
 				<header class="header">
 					<Navbar bg="light" variant="light">
-						<Navbar.Brand href="#home">Navbar</Navbar.Brand>
+						<img src="https://cdn11.bigcommerce.com/s-90vdngbq7j/images/stencil/150x60/buy-on-trust-logo_1563418732__08831.original.png" alt="Buy On Trust" title="Buy On Trust" id="logo-img" />
 					</Navbar>
 				</header>
 				<article class="main">
-					<MapContainer stores={stores} map={map}/>
+					<MapContainer stores={stores} map={map} />
 				</article>
 				<aside class="listings">
 					<SearchBar />

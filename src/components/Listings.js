@@ -18,7 +18,7 @@ class Listings extends React.Component {
 		return (
 			<div class="sidebar">
 				<div class="heading">
-					<h1>Our locations</h1>
+					<h1>Store locations</h1>
 					{stores?buildLocationList(stores, map):'Please enter your zipcode.'}
 				</div>
 				<div id="listings" class="listings" />

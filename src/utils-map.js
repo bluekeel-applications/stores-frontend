@@ -29,7 +29,8 @@ export const createMap = async (stores) => {
     }
 }
 
-export const flyToStore = (currentFeature, map) => {
+export const flyToStore = (currentFeature,map) => {
+	console.log('map:', this)
 	map.flyTo({
 		center: currentFeature.geometry.coordinates,
 		zoom: 15
@@ -71,9 +72,9 @@ export const addMapClicks = (map, stores) => {
 		if (features.length) {
 			var clickedPoint = features[0];
 			// 1. Fly to the point
-			flyToStore(clickedPoint, map);
+			flyToStore(clickedPoint);
 			// 2. Close all other popups and display popup for clicked store
-			createPopUp(clickedPoint, map);
+			createPopUp(clickedPoint);
 			// 3. Highlight listing in sidebar (and remove highlight for all other listings)
 			var activeItem = document.getElementsByClassName('active');
 			if (activeItem[0]) {

@@ -1,6 +1,39 @@
-import { flyToStore, createPopUp } from './utils-map';
+import * as MapboxGL from 'mapbox-gl';
 
+const flyToStore = (currentFeature, map) => {
+	console.log('map:', this);
+	map.flyTo({
+		center: currentFeature.geometry.coordinates,
+		zoom: 15
+	});
+};
+
+const createPopUp = (currentFeature, map) => {
+	// This will let you use the .remove() function later on
+	if (!('remove' in Element.prototype)) {
+		Element.prototype.remove = function() {
+			if (this.parentNode) {
+				this.parentNode.removeChild(this);
+			}
+		};
+	}
+
+	const popUps = document.getElementsByClassName('mapboxgl-popup');
+	// Check if there is already a popup on the map and if so, remove it
+	if (popUps[0]) popUps[0].remove();
+
+	new MapboxGL.Popup({ closeOnClick: false })
+		.setLngLat(currentFeature.geometry.coordinates)
+		.setHTML(
+			'<h3>Sweetgreen</h3>' +
+				'<h4>' +
+				currentFeature.properties.address +
+				'</h4>'
+		)
+		.addTo(map);
+};
 export const buildLocationList = (data, map) => {
+	
 	// Iterate through the list of stores
 	for (let i = 0; i < data.features.length; i++) {
 		let currentFeature = data.features[i];
