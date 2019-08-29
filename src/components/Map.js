@@ -1,13 +1,9 @@
-// import React,{ Component } from 'react';
-// import * as MapboxGL from 'mapbox-gl';
-
-import { token } from '../config.json';
-
-// import { addMapClicks, createMap } from '../utils-map';
-
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Component } from 'react';
 import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+
+import { token, MY_MAP_STYLE } from '../config.json';
+
+import MapboxMap, { Marker } from 'react-mapbox-wrapper';
 
 const isMobile = () => {
 	return window.innerWidth < 600 ? true : false;
@@ -16,37 +12,78 @@ const isMobile = () => {
 const styles = {
 	width: '100%',
 	height: isMobile() ? '40vh':'100vh',
-	//position: 'absolute'
 	flex: 1
 };
 
-const Mapbox = () => {
-	const [map, setMap] = useState(null);
-	const mapContainer = useRef(null);
-console.log('this:', mapContainer.current)
-	useEffect(() => {
-		mapboxgl.accessToken = token;
-		const initializeMap = ({ setMap, mapContainer }) => {
-			const map = new mapboxgl.Map({
-				container: mapContainer.current,
-				style: 'mapbox://styles/westonbluekeel/cjzvf1cl413ms1cn7yuamnbyn', // stylesheet location
-				center: [0, 0],
-				zoom: 5
-			});
 
-			map.on('load', () => {
-				setMap(map);
-				map.resize();
-			});
+export default class Mapbox extends Component {
+
+	onMapLoad = (map) => {
+		this.map = map;
+		const nav = new mapboxgl.NavigationControl();
+		map.addControl(nav, 'top-left');
+		this.forceUpdate();
+	}
+
+	render() {
+		let markers = [];
+		const { stores } = this.props;
+		const firstStore = stores.features[0];
+
+		const DEFAULT_COORDINATES = {
+			lat: firstStore.geometry.coordinates[1],
+			lng: firstStore.geometry.coordinates[0]
 		};
 
-		if (!map) initializeMap({ setMap, mapContainer });
-	}, [map]);
+		if (this.map && stores.features.length > 0) {
+			
+			for(let i=0; i < stores.features.length; i++) {
+				let store = stores.features[i];
+				let popup = <div>{stores.name}</div>;
+				let coordinates = { 
+					lat: store.geometry.coordinates[1],
+					lng: store.geometry.coordinates[0]
+				};
+				let marker = (
+					<Marker
+						key={store.properties.storeId}
+						coordinates={coordinates}
+						map={this.map}
+						popup={popup}
+						popupAnchor="bottom"
+						popupOnOver
+						popupOffset={20}
+					>
+						<span
+							role="img"
+							aria-label="Emoji Marker"
+							style={{ fontSize: '30px' }}
+						>
+							🏢
+						</span>
+					</Marker>
+				);
+				markers.push(marker);
+			}
+		}
 
-	return <div ref={el => (mapContainer.current = el)} style={styles} />;
-};
+		return (
+			<div style={styles}>
+				<MapboxMap
+					accessToken={token}
+					coordinates={DEFAULT_COORDINATES}
+					mapboxStyle={MY_MAP_STYLE}
+					className="map-container"
+					onLoad={this.onMapLoad}
+				>
+					{markers}
+				</MapboxMap>
+			</div>
+		);
+	}
+}
 
-export default Mapbox;
+Mapbox.displayName = 'CustomMarker';
 // class MapContainer extends Component {
 
 // 	constructor(props) {

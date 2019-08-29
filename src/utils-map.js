@@ -1,33 +1,4 @@
 import * as MapboxGL from 'mapbox-gl';
-import { getResponseHeaders } from './utils-data';
-import { token } from './config.json';
-
-export const createMap = async (stores, map) => {
-    try {
-        MapboxGL.accessToken = token;
-		// This adds the map to your page
-		return new MapboxGL.Map({
-			// container id specified in the HTML
-			container: map,
-			// style URL
-			style: 'mapbox://styles/westonbluekeel/cjzvf1cl413ms1cn7yuamnbyn',
-			// initial position in [lon, lat] format
-			center: stores.features[0].geometry.coordinates,
-			// initial zoom
-			zoom: 10
-		});
-    } catch(err) { 
-        console.log('Error:', err);
-		return {
-			statusCode: err.statusCode ? err.statusCode : 500,
-			headers: getResponseHeaders(),
-			body: JSON.stringify({
-				error: err.name ? err.name : 'Exception',
-				message: err.message ? err.message : 'Uknown error'
-			})
-		};
-    }
-}
 
 export const flyToStore = (currentFeature,map) => {
 	console.log('map:', this)
