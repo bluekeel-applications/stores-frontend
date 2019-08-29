@@ -39,7 +39,7 @@ export default class Mapbox extends Component {
 			
 			for(let i=0; i < stores.features.length; i++) {
 				let store = stores.features[i];
-				let popup = <div>{stores.name}</div>;
+				let popup = <div>{store.properties.longName}</div>;
 				let coordinates = { 
 					lat: store.geometry.coordinates[1],
 					lng: store.geometry.coordinates[0]
