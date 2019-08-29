@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { Navbar } from 'react-bootstrap';
-// import * as MapboxGL from 'mapbox-gl';
 
-// import { token } from '../config.json';
-
-import MapContainer from './Map';
+import Mapbox from './Map';
 import Listings from './Listings';
 import SearchBar from './SearchBar';
 
@@ -25,18 +22,6 @@ class App extends Component {
 	componentDidMount = async () => {
 		this.stores = await getStoreList(80121);
 		this.setState({ stores: this.stores });
-		// MapboxGL.accessToken = token;
-
-		// const map = new MapboxGL.Map({
-		// 	container: this.mapContainer,
-		// 	// style URL
-		// 	style: 'mapbox://styles/westonbluekeel/cjzvf1cl413ms1cn7yuamnbyn',
-		// 	// initial position in [lon, lat] format
-		// 	center: this.stores.features[0].geometry.coordinates,
-		// 	// initial zoom
-		// 	zoom: 10
-		// });
-		// this.setState({ map: map });
 	};
 
 	// componentWillUnmount() {
@@ -59,9 +44,7 @@ class App extends Component {
 					</Navbar>
 				</header>
 				<article class="main">
-					<MapContainer
-						stores={stores}
-					/>
+					{stores ? <Mapbox stores={stores} /> : <p>Please enter a zipcode</p>}
 				</article>
 				<aside class="listings">
 					<SearchBar />
