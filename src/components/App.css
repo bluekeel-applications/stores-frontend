@@ -23,6 +23,20 @@ body {
   padding: 10px;
 }
 
+.searchbar-div {
+  padding: 20px;
+  border-bottom: 1px solid rgb(34,168,158);
+}
+
+#searchButton {
+  margin-left: 5%;
+  border: 1px solid rgb(34,168,158);
+}
+
+#searchButton:hover {
+  background-color:rgba(34,168,158,0.2);
+}
+
 /* Marker tweaks */
 .mapboxgl-popup-close-button {
   display: none;
@@ -72,6 +86,3 @@ body {
   border-bottom-color: #91c949;
 }
 
-Button {
-  margin: 10px;
-}

@@ -1,4 +1,5 @@
 import React,{ Component } from 'react';
+import { addMapClicks, loadMap } from '../utils-map';
 
 class MapContainer extends Component {
 
@@ -11,7 +12,16 @@ class MapContainer extends Component {
 				height: this.isMobile() ? '40vh':'100vh',
 			}
 		};
-	}		
+	}
+	
+	componentDidMount = () => {
+		let { map, stores } = this.props;
+		
+		if (map && stores) {
+			loadMap(map, stores);
+			addMapClicks(map, stores);
+		}
+	}
 
 	isMobile = () => {
 		return window.innerWidth < 600 ? true : false;
