@@ -57,7 +57,7 @@ export default class Mapbox extends Component {
 						<span
 							role="img"
 							aria-label="Emoji Marker"
-							style={{ fontSize: '30px' }}
+							style={{ fontSize: '50px' }}
 						>
 							🏢
 						</span>
