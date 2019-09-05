@@ -33,18 +33,13 @@ export default class Mapbox extends Component {
 		const { stores } = this.props;
 		mapboxgl.accessToken = token;
 		const firstStore = stores.features[0].geometry.coordinates;
-		
-		this.setState({
-			lng: firstStore[1],
-			lat: firstStore[0]
-		});
 
 		const { zoom } = this.state;
 
 		const map = new mapboxgl.Map({
 			container: this.mapContainer,
 			style: MY_MAP_STYLE,
-			center: [firstStore[0], firstStore[1]],
+			center: [0,0],
 			zoom
 		});
 
@@ -58,20 +53,20 @@ export default class Mapbox extends Component {
 			});
 		});
 
-		map.on('load', function(e) {
+		map.on('load', (e) => {
 				// Add the data to the map as a layer
 			console.log('adding source to map')
-			map.addSource('stores', {
-				type: 'geojson',
-				data: stores
+			map.flyTo({
+				center: [firstStore[0], firstStore[1]],
+				zoom: 7
 			});
-			console.log('adding layer to map');
+		
 			map.addLayer({
 				id: 'locations',
 				type: 'symbol',
 				source: {
 					type: 'geojson',
-					data: 'stores'
+					data: stores
 				},
 				layout: {
 					'icon-image': 'embassy-15',
@@ -79,7 +74,34 @@ export default class Mapbox extends Component {
 				}
 			});
 		});
+		
 	}
+
+	createPopUp = (currentFeature) => {
+		// This will let you use the .remove() function later on
+		if (!('remove' in Element.prototype)) {
+			Element.prototype.remove = function() {
+				if (this.parentNode) {
+					this.parentNode.removeChild(this);
+				}
+			};
+		}
+
+		const popUps = document.getElementsByClassName('mapboxgl-popup');
+		// Check if there is already a popup on the map and if so, remove it
+		if (popUps[0]) popUps[0].remove();
+
+		new mapboxgl.Popup({ closeOnClick: false })
+			.setLngLat(currentFeature.geometry.coordinates)
+			.setHTML(
+				'<h3>Sweetgreen</h3>' +
+					'<h4>' +
+					currentFeature.properties.address +
+					'</h4>'
+			)
+			.addTo(this.map);
+	};
+
 	
 	isMobile = () => {
 		return window.innerWidth < 600 ? true : false;
