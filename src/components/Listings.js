@@ -1,5 +1,4 @@
 import React from 'react';
-// import { buildLocationList } from '../utils-list';
 
 import './Listings.css';
 

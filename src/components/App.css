@@ -13,8 +13,8 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-.main {
-  border-left: 3px solid rgb(229,229,229);
+#map-container {
+  border: 3px solid red;
 }
 
 .navbar {
