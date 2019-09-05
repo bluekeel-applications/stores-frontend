@@ -57,8 +57,30 @@ export default class Mapbox extends Component {
 				zoom: map.getZoom().toFixed(2)
 			});
 		});
-	}
 
+		map.on('load', function(e) {
+				// Add the data to the map as a layer
+			console.log('adding source to map')
+			map.addSource('stores', {
+				type: 'geojson',
+				data: stores
+			});
+			console.log('adding layer to map');
+			map.addLayer({
+				id: 'locations',
+				type: 'symbol',
+				source: {
+					type: 'geojson',
+					data: 'stores'
+				},
+				layout: {
+					'icon-image': 'embassy-15',
+					'icon-allow-overlap': true
+				}
+			});
+		});
+	}
+	
 	isMobile = () => {
 		return window.innerWidth < 600 ? true : false;
 	};
