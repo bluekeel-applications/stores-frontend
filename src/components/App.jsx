@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { Navbar } from 'react-bootstrap';
 import SearchBar from './SearchBar';
+import Popup from './Popup';
 
 import mapboxgl from 'mapbox-gl';
 
@@ -28,7 +30,8 @@ class App extends Component {
 			lng: 0,
 			lat: 0,
 			zoom: 8,
-			map: null
+			map: null,
+			currentStore: null
 		};
 	}
 
@@ -52,20 +55,20 @@ class App extends Component {
 
 			map.on('move', () => {
 				const { lng, lat } = map.getCenter();
-	
+
 				this.setState({
 					lng: lng.toFixed(4),
 					lat: lat.toFixed(4),
 					zoom: map.getZoom().toFixed(2)
 				});
 			});
-	
+
 			map.on('load', e => {
 				map.flyTo({
 					center: [firstStore[0], firstStore[1]],
 					zoom: 9
 				});
-	
+
 				map.addLayer({
 					id: 'locations',
 					type: 'symbol',
@@ -79,18 +82,28 @@ class App extends Component {
 					}
 				});
 			});
-	
+
 			map.on('click', e => {
-				// Query all the rendered points in the view
-				var features = map.queryRenderedFeatures(e.point, {
+				const features = map.queryRenderedFeatures(e.point, {
 					layers: ['locations']
 				});
 				if (features.length) {
-					var clickedPoint = features[0];
+					const clickedPoint = features[0];
 					console.log('clickedPoint:', clickedPoint);
 					this.flyToStore(clickedPoint);
-					this.createPopUp(clickedPoint);
+					this.createPopUp(
+						<Popup store={clickedPoint} />,
+						clickedPoint
+					);
+					this.updateStateToCurrentStore(clickedPoint);
 				}
+			});
+
+			map.on('mousemove', e => {
+				const features = map.queryRenderedFeatures(e.point, {
+					layers: ['locations']
+				});
+				map.getCanvas().style.cursor = features.length ? 'pointer' : '';
 			});
 		}
 	};
@@ -105,8 +118,9 @@ class App extends Component {
 		});
 	};
 
-	createPopUp = currentFeature => {
+	createPopUp = (popupJSX, clickedPoint) => {
 		const { map } = this.state;
+		const coordinates = clickedPoint.geometry.coordinates;
 		// This will let you use the .remove() function later on
 		if (!('remove' in Element.prototype)) {
 			Element.prototype.remove = function() {
@@ -115,20 +129,23 @@ class App extends Component {
 				}
 			};
 		}
-		const popUps = document.getElementsByClassName('mapboxgl-popup');
+
 		// Check if there is already a popup on the map and if so, remove it
+		const popUps = document.getElementsByClassName('mapboxgl-popup');
 		if (popUps[0]) popUps[0].remove();
 
+		const popUpContainer = document.createElement('div');
+		ReactDOM.render(popupJSX, popUpContainer);
+
 		new mapboxgl.Popup({ closeOnClick: false })
-			.setLngLat(currentFeature.geometry.coordinates)
-			.setHTML(
-				'<h3>Sweetgreen</h3>' +
-					'<h4>' +
-					currentFeature.properties.address +
-					'</h4>'
-			)
+			.setDOMContent(popUpContainer)
+			.setLngLat(coordinates)
 			.addTo(map);
 	};
+
+	updateStateToCurrentStore = clickedPoint => {
+		this.setState({currentStore: clickedPoint});
+	}
 
 	render() {
 		const { stores } = this.state;

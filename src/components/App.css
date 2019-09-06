@@ -35,62 +35,64 @@ body {
   margin-right: 10px;
 }
 
-#searchButton {
-  align-self: center;
-  /* margin: 5%; */
-  border: 1px solid rgb(34,168,158);
-}
-
-#searchButton:hover {
-  background-color:rgba(34,168,158,0.2);
-}
-
 /* Marker tweaks */
 .mapboxgl-popup-close-button {
-  display: none;
+  display: visible;
 }
 
 .mapboxgl-popup-content {
   font: 400 15px/22px 'Source Sans Pro', 'Helvetica Neue', Sans-serif;
   padding: 0;
-  width: 180px;
+  width: 100%;
 }
 
-.mapboxgl-popup-content-wrapper {
-  padding: 1%;
-}
 
 .mapboxgl-popup-content h3 {
-  background: rgb(34,168,158);
-  color: #fff;
   margin: 0;
   display: block;
-  padding: 10px;
-  border-radius: 3px 3px 0 0;
-  font-weight: 700;
-  margin-top: -15px;
+  padding: 15px;
+  border-bottom: 3px solid;
+  border-color: #18847d;
+  border-radius: 0;
+  background-color: #13a89e;
+  color: #fff;
 }
 
 .mapboxgl-popup-content h4 {
   margin: 0;
   display: block;
-  padding: 10px;
+  padding: 2px 15px;
   font-weight: 400;
 }
 
 .mapboxgl-popup-content div {
-  padding: 10px;
+  border: .1px solid #18847d;
+  font-family: "Roboto Condensed",Arial,Helvetica,sans-serif;
+  font-weight: 700;
 }
 
 .mapboxgl-container .leaflet-marker-icon {
   cursor: pointer;
 }
 
-.mapboxgl-popup-anchor-top > .mapboxgl-popup-content {
-  margin-top: 15px;
+.popup-header-title {
+  margin-bottom: 5px;
+  margin-left: 5px;
+}
+.popup-distance {
+  margin: 2px 10px;
+  padding: 0;
 }
 
-.mapboxgl-popup-anchor-top > .mapboxgl-popup-tip {
-  border-bottom-color: #91c949;
+.popup-button {
+  font-size: 14px;
+  text-transform: uppercase;
+  border-bottom: 3px solid;
+  border-color: #18847d;
+  border-radius: 0;
+  background-color: #13a89e;
+  color: #fff;
+  max-width: 100%;
+  margin: 10px;
+  padding: 10px;
 }
-
