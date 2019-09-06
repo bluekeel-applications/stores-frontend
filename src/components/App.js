@@ -1,23 +1,133 @@
 import React, { Component } from 'react';
 import { Navbar } from 'react-bootstrap';
+import SearchBar from './SearchBar';
 
-import Mapbox from './Map';
+import mapboxgl from 'mapbox-gl';
 
+import { token, MY_MAP_STYLE } from '../config.json';
 import { getStoreList } from '../utils-data';
 
 import './App.css';
 
+const styles = {
+	maxWidth: '100vw',
+	height: '100vh',
+	margin: '5px',
+	flex: 1
+};
+
 class App extends Component {
 	constructor(props) {
-		super(props)
+		super(props);
+
+		this.mapContainer = React.createRef();
 
 		this.state = {
-			stores: null
-		}
+			zip: null,
+			stores: null,
+			lng: 0,
+			lat: 0,
+			zoom: 8,
+			map: null
+		};
 	}
+
 	componentDidMount = async () => {
-		this.stores = await getStoreList(80121);
-		this.setState({ stores: this.stores });
+		const stores = await getStoreList(80121);
+		this.setState({ stores });
+
+		const firstStore = stores.features[0].geometry.coordinates;
+		mapboxgl.accessToken = token;
+
+		if (this.state.stores !== null) {
+			this.setState({
+				map: new mapboxgl.Map({
+					container: this.mapContainer.current,
+					style: MY_MAP_STYLE,
+					center: [0, 0],
+					zoom: this.state.zoom
+				})
+			});
+			const { map } = this.state;
+
+			map.on('move', () => {
+				const { lng, lat } = map.getCenter();
+	
+				this.setState({
+					lng: lng.toFixed(4),
+					lat: lat.toFixed(4),
+					zoom: map.getZoom().toFixed(2)
+				});
+			});
+	
+			map.on('load', e => {
+				map.flyTo({
+					center: [firstStore[0], firstStore[1]],
+					zoom: 9
+				});
+	
+				map.addLayer({
+					id: 'locations',
+					type: 'symbol',
+					source: {
+						type: 'geojson',
+						data: stores
+					},
+					layout: {
+						'icon-image': 'embassy-15',
+						'icon-allow-overlap': true
+					}
+				});
+			});
+	
+			map.on('click', e => {
+				// Query all the rendered points in the view
+				var features = map.queryRenderedFeatures(e.point, {
+					layers: ['locations']
+				});
+				if (features.length) {
+					var clickedPoint = features[0];
+					console.log('clickedPoint:', clickedPoint);
+					this.flyToStore(clickedPoint);
+					this.createPopUp(clickedPoint);
+				}
+			});
+		}
+	};
+
+	flyToStore = clickedPoint => {
+		const { map } = this.state;
+		const coordinates = clickedPoint.geometry.coordinates;
+
+		map.flyTo({
+			center: [coordinates[0], coordinates[1]],
+			zoom: 14
+		});
+	};
+
+	createPopUp = currentFeature => {
+		const { map } = this.state;
+		// This will let you use the .remove() function later on
+		if (!('remove' in Element.prototype)) {
+			Element.prototype.remove = function() {
+				if (this.parentNode) {
+					this.parentNode.removeChild(this);
+				}
+			};
+		}
+		const popUps = document.getElementsByClassName('mapboxgl-popup');
+		// Check if there is already a popup on the map and if so, remove it
+		if (popUps[0]) popUps[0].remove();
+
+		new mapboxgl.Popup({ closeOnClick: false })
+			.setLngLat(currentFeature.geometry.coordinates)
+			.setHTML(
+				'<h3>Sweetgreen</h3>' +
+					'<h4>' +
+					currentFeature.properties.address +
+					'</h4>'
+			)
+			.addTo(map);
 	};
 
 	render() {
@@ -33,9 +143,18 @@ class App extends Component {
 							title="Buy On Trust"
 							id="logo-img"
 						/>
+						<SearchBar />
 					</Navbar>
 				</header>
-				{stores?<Mapbox stores={stores} /> : 'Please enter zipcode'}
+				{stores ? (
+					<div
+						id="map-container"
+						style={styles}
+						ref={this.mapContainer}
+					/>
+				) : (
+					'Please enter zipcode'
+				)}
 				<footer className="footer">Footer</footer>
 			</div>
 		);

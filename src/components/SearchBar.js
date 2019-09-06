@@ -16,10 +16,10 @@ class SearchBar extends React.Component {
 				<Form inline>
 					<FormControl
 						type="text"
-						placeholder="Search"
+						placeholder="Search by Zipcode"
 						className="mr-sm-2"
 					/>
-					<Button id="searchButton" variant="outline-primary">Search</Button>
+					{/* <Button id="searchButton" variant="outline-primary">Search</Button> */}
 				</Form>
 			</div>
 		);
