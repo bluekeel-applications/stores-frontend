@@ -8,10 +8,16 @@ class Popup extends React.Component {
 		return (
 			<div class="popup-element">
 				<h3>
-					<b>{store.longName}</b>
-					<br />
-					<h5 class="popup-distance">{store.distance} miles aways</h5>
+					<b>
+						<h4 class="header-subs">The</h4>
+						{store.longName}
+						<br />
+						<h4 class="header-subs">Store</h4>
+					</b>
 				</h3>
+				<h5 class="popup-distance">
+					<b><em>{store.distance}</em></b> miles aways
+				</h5>
 				<h5 class="popup-header-title">Address: </h5>
 				<h4>
 					{store.address}

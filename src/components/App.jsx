@@ -81,6 +81,7 @@ class App extends Component {
 						'icon-allow-overlap': true
 					}
 				});
+				this.onMapLoad();
 			});
 
 			map.on('click', e => {
@@ -106,6 +107,13 @@ class App extends Component {
 				map.getCanvas().style.cursor = features.length ? 'pointer' : '';
 			});
 		}
+	};
+
+	onMapLoad = () => {
+		const { map } = this.state;
+		const nav = new mapboxgl.NavigationControl();
+		map.addControl(nav, 'top-right');
+		// this.forceUpdate();
 	};
 
 	flyToStore = clickedPoint => {
@@ -144,8 +152,8 @@ class App extends Component {
 	};
 
 	updateStateToCurrentStore = clickedPoint => {
-		this.setState({currentStore: clickedPoint});
-	}
+		this.setState({ currentStore: clickedPoint });
+	};
 
 	render() {
 		const { stores } = this.state;
