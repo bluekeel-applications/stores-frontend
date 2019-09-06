@@ -8,6 +8,7 @@ import mapboxgl from 'mapbox-gl';
 
 import { token, MY_MAP_STYLE } from '../config.json';
 import { getStoreList } from '../utils-data';
+import { onMapLoad } from '../utils-map';
 
 import './App.css';
 
@@ -31,15 +32,18 @@ class App extends Component {
 			lat: 0,
 			zoom: 8,
 			map: null,
+			firstStore: null,
 			currentStore: null
 		};
 	}
 
 	componentDidMount = async () => {
 		const stores = await getStoreList(80121);
-		this.setState({ stores });
+		this.setState({
+			stores,
+			firstStore: stores.features[0].geometry.coordinates
+		});
 
-		const firstStore = stores.features[0].geometry.coordinates;
 		mapboxgl.accessToken = token;
 
 		if (this.state.stores !== null) {
@@ -51,37 +55,19 @@ class App extends Component {
 					zoom: this.state.zoom
 				})
 			});
-			const { map } = this.state;
+			const { map, stores, firstStore } = this.state;
 
 			map.on('move', () => {
 				const { lng, lat } = map.getCenter();
-
 				this.setState({
-					lng: lng.toFixed(4),
-					lat: lat.toFixed(4),
+					lng: lng.toFixed(2),
+					lat: lat.toFixed(2),
 					zoom: map.getZoom().toFixed(2)
 				});
 			});
 
 			map.on('load', e => {
-				map.flyTo({
-					center: [firstStore[0], firstStore[1]],
-					zoom: 9
-				});
-
-				map.addLayer({
-					id: 'locations',
-					type: 'symbol',
-					source: {
-						type: 'geojson',
-						data: stores
-					},
-					layout: {
-						'icon-image': 'embassy-15',
-						'icon-allow-overlap': true
-					}
-				});
-				this.onMapLoad();
+				onMapLoad(map, stores, firstStore);
 			});
 
 			map.on('click', e => {
@@ -90,7 +76,6 @@ class App extends Component {
 				});
 				if (features.length) {
 					const clickedPoint = features[0];
-					console.log('clickedPoint:', clickedPoint);
 					this.flyToStore(clickedPoint);
 					this.createPopUp(
 						<Popup store={clickedPoint} />,
@@ -109,12 +94,7 @@ class App extends Component {
 		}
 	};
 
-	onMapLoad = () => {
-		const { map } = this.state;
-		const nav = new mapboxgl.NavigationControl();
-		map.addControl(nav, 'top-right');
-		// this.forceUpdate();
-	};
+	
 
 	flyToStore = clickedPoint => {
 		const { map } = this.state;
@@ -122,7 +102,7 @@ class App extends Component {
 
 		map.flyTo({
 			center: [coordinates[0], coordinates[1]],
-			zoom: 14
+			zoom: 13
 		});
 	};
 
@@ -180,7 +160,6 @@ class App extends Component {
 				) : (
 					'Please enter zipcode'
 				)}
-				<footer className="footer">Footer</footer>
 			</div>
 		);
 	}
