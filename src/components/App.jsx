@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+
 import { Navbar } from 'react-bootstrap';
 import SearchBar from './SearchBar';
 import Popup from './Popup';
@@ -8,7 +8,11 @@ import mapboxgl from 'mapbox-gl';
 
 import { token, MY_MAP_STYLE } from '../config.json';
 import { getStoreList } from '../utils-data';
-import { onMapLoad } from '../utils-map';
+import {
+	onMapLoad,
+	flyToStore,
+	createPopUp
+} from '../utils-map';
 
 import './App.css';
 
@@ -76,59 +80,21 @@ class App extends Component {
 				});
 				if (features.length) {
 					const clickedPoint = features[0];
-					this.flyToStore(clickedPoint);
-					this.createPopUp(
+					flyToStore(clickedPoint, map);
+					createPopUp(
 						<Popup store={clickedPoint} />,
-						clickedPoint
+						clickedPoint,
+						map
 					);
 					this.updateStateToCurrentStore(clickedPoint);
 				}
 			});
 
 			map.on('mousemove', e => {
-				const features = map.queryRenderedFeatures(e.point, {
-					layers: ['locations']
-				});
+				const features = map.queryRenderedFeatures(e.point, { layers: ['locations'] });
 				map.getCanvas().style.cursor = features.length ? 'pointer' : '';
 			});
 		}
-	};
-
-	
-
-	flyToStore = clickedPoint => {
-		const { map } = this.state;
-		const coordinates = clickedPoint.geometry.coordinates;
-
-		map.flyTo({
-			center: [coordinates[0], coordinates[1]],
-			zoom: 13
-		});
-	};
-
-	createPopUp = (popupJSX, clickedPoint) => {
-		const { map } = this.state;
-		const coordinates = clickedPoint.geometry.coordinates;
-		// This will let you use the .remove() function later on
-		if (!('remove' in Element.prototype)) {
-			Element.prototype.remove = function() {
-				if (this.parentNode) {
-					this.parentNode.removeChild(this);
-				}
-			};
-		}
-
-		// Check if there is already a popup on the map and if so, remove it
-		const popUps = document.getElementsByClassName('mapboxgl-popup');
-		if (popUps[0]) popUps[0].remove();
-
-		const popUpContainer = document.createElement('div');
-		ReactDOM.render(popupJSX, popUpContainer);
-
-		new mapboxgl.Popup({ closeOnClick: false })
-			.setDOMContent(popUpContainer)
-			.setLngLat(coordinates)
-			.addTo(map);
 	};
 
 	updateStateToCurrentStore = clickedPoint => {
