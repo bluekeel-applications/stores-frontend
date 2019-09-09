@@ -1,15 +1,24 @@
 import React from 'react';
 
 class Popup extends React.Component {
+
+	sendMessage = (msg) => {
+		const iframeEl = document.getElementById('the_iframe');
+		const data = JSON.stringify(msg);
+		iframeEl.contentWindow.postMessage(data, '*');
+	}
+
 	onClick = () => {
 		const store = this.props.store.properties;
-		localStorage.setItem('store-picked', 'true');
-		localStorage.setItem('store-id', store.storeId);
-		localStorage.setItem('store-name', store.longName);
-		localStorage.setItem('store-address', store.address);
-		localStorage.setItem('store-phone', store.phoneFormatted);
-		console.log('store saved to local storage');
-		this.parent.hideStorePicker();
+		const storeData = {
+			'store-picked': true,
+			'store-id': store.storeId,
+			'store-name': store.longName,
+			'store-address': store.address,
+			'store-phone': store.phoneFormatted
+		}
+		this.sendMessage(storeData);
+		window.parent.hideStorePicker();
 	}
 	
 	render() {
