@@ -30,7 +30,7 @@ export const getResponseHeaders = () => {
 
 export const sendMessage = msg => {
 	const data = JSON.stringify(msg);
-	window.top.postMessage(data, '*');
+	window.parent.postMessage(data, '*');
 };
 
 export const newCurrentStore = (store) => {

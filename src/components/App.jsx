@@ -37,11 +37,26 @@ class App extends Component {
 			zoom: 8,
 			map: null,
 			firstStore: null,
-			currentStore: null
+			currentStore: null,
+			// storePicked: localStorage.getItem('storePicked')
+			storePicked: true
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = () => {
+		if (this.state.storePicked) {
+				this.loadMapWithZip();
+			} else {
+				console.log('need a zipcode');
+			}
+		}
+	
+
+	updateStateToCurrentStore = clickedPoint => {
+		this.setState({ currentStore: clickedPoint });
+	};
+
+	loadMapWithZip = async () => {
 		const stores = await getStoreList(80121);
 		this.setState({
 			stores,
@@ -87,22 +102,23 @@ class App extends Component {
 						this.updateStateToCurrentStore(clickedPoint);
 					}
 				});
-	
+
 				map.on('mousemove', e => {
-					const features = map.queryRenderedFeatures(e.point, { layers: ['locations'] });
-					map.getCanvas().style.cursor = features.length ? 'pointer' : '';
+					const features = map.queryRenderedFeatures(e.point, {
+						layers: ['locations']
+					});
+					map.getCanvas().style.cursor = features.length
+						? 'pointer'
+						: '';
 				});
 			});
-
+		
+		
 		}
 	};
 
-	updateStateToCurrentStore = clickedPoint => {
-		this.setState({ currentStore: clickedPoint });
-	};
-
 	render() {
-		const { stores } = this.state;
+		const { storePicked } = this.state;
 
 		return (
 			<div className="App wrapper">
@@ -117,7 +133,7 @@ class App extends Component {
 						<SearchBar />
 					</Navbar>
 				</header>
-				{stores ? (
+				{storePicked ? (
 					<div
 						id="map-container"
 						style={styles}
