@@ -19,6 +19,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "predeploy": "yarn build",
+    "deploy": "aws s3 sync build/ s3://store-picker --profile buyontrust --delete",
+    "postdeploy": "aws cloudfront create-invalidation --distribution-id E3B4YY21QOSA9W --paths \"/*\" --profile buyontrust",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
