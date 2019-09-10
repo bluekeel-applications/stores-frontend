@@ -28,3 +28,20 @@ export const getResponseHeaders = () => {
 	};
 };
 
+export const sendMessage = msg => {
+	const data = JSON.stringify(msg);
+	window.top.postMessage(data, '*');
+};
+
+export const newCurrentStore = (store) => {
+	const storeData = {
+		'storePicked': true,
+		'storeId': store.storeId,
+		'storeName': store.longName,
+		'storeAddress': store.address,
+		'storePhone': store.phoneFormatted
+	};
+	sendMessage(storeData);
+	window.location.href = 'https://buyontrust.com/';
+};
+

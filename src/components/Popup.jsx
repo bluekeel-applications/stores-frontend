@@ -1,23 +1,11 @@
 import React from 'react';
+import { newCurrentStore } from '../utils-data';
 
 class Popup extends React.Component {
 
-	sendMessage = (msg) => {
-		const data = JSON.stringify(msg);
-		window.top.postMessage(data, '*');
-	}
-
-	onClick = () => {
+	onSelection = () => {
 		const store = this.props.store.properties;
-		const storeData = {
-			'store-picked': true,
-			'store-id': store.storeId,
-			'store-name': store.longName,
-			'store-address': store.address,
-			'store-phone': store.phoneFormatted
-		}
-		this.sendMessage(storeData);
-		window.location.href = 'https://buyontrust.com/';
+		newCurrentStore(store);
 	}
 	
 	render() {
@@ -34,7 +22,10 @@ class Popup extends React.Component {
 					</b>
 				</h3>
 				<h5 class="popup-distance">
-					<b><em>{store.distance}</em></b> miles aways
+					<b>
+						<em>{store.distance}</em>
+					</b>{' '}
+					miles aways
 				</h5>
 				<h5 class="popup-header-title">Address: </h5>
 				<h4>
@@ -42,7 +33,9 @@ class Popup extends React.Component {
 					<br />
 					{addressLower}
 				</h4>
-				<button class="popup-button" onClick={this.onClick}>Make this your store!</button>
+				<button class="popup-button" onClick={this.onSelection}>
+					Make this your store!
+				</button>
 			</div>
 		);
 	}

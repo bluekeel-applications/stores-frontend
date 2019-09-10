@@ -13,11 +13,11 @@ class SearchBar extends React.Component {
 	render() {
 		return (
 			<div class="searchbar-div">
-				<Form inline>
+				<Form>
 					<FormControl
 						type="text"
-						placeholder="Search by Zipcode"
-						className="mr-sm-2"
+						placeholder="Enter Zipcode"
+						// className="mr-sm-2"
 					/>
 					{/* <Button id="searchButton" variant="outline-primary">Search</Button> */}
 				</Form>
