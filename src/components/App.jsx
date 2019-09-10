@@ -72,28 +72,28 @@ class App extends Component {
 
 			map.on('load', e => {
 				onMapLoad(map, stores, firstStore);
-			});
-
-			map.on('click', e => {
-				const features = map.queryRenderedFeatures(e.point, {
-					layers: ['locations']
+				map.on('click', e => {
+					const features = map.queryRenderedFeatures(e.point, {
+						layers: ['locations']
+					});
+					if (features.length) {
+						const clickedPoint = features[0];
+						flyToStore(clickedPoint, map);
+						createPopUp(
+							<Popup store={clickedPoint} />,
+							clickedPoint,
+							map
+						);
+						this.updateStateToCurrentStore(clickedPoint);
+					}
 				});
-				if (features.length) {
-					const clickedPoint = features[0];
-					flyToStore(clickedPoint, map);
-					createPopUp(
-						<Popup store={clickedPoint} />,
-						clickedPoint,
-						map
-					);
-					this.updateStateToCurrentStore(clickedPoint);
-				}
+	
+				map.on('mousemove', e => {
+					const features = map.queryRenderedFeatures(e.point, { layers: ['locations'] });
+					map.getCanvas().style.cursor = features.length ? 'pointer' : '';
+				});
 			});
 
-			map.on('mousemove', e => {
-				const features = map.queryRenderedFeatures(e.point, { layers: ['locations'] });
-				map.getCanvas().style.cursor = features.length ? 'pointer' : '';
-			});
 		}
 	};
 
