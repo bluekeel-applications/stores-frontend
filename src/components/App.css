@@ -6,7 +6,7 @@
 
 body {
   /* background: #404040; */
-  color: rgb(84,84,84);
+  color: #545454;
   /* font: 500 20px/26px 'Helvetica Neue', Helvetica, Arial, Sans-serif; */
   margin: 0;
   padding: 0;
@@ -14,8 +14,11 @@ body {
 }
 
 .navbar {
-  border: 1px solid rgb(34,168,158);
-  background-color: rgba(34,168,158, 0.15);
+  /* border: 1px solid rgb(34,168,158); */
+  /* background-color: rgba(34,168,158, 0.15); */
+  border-bottom: 3px solid;
+  border-color: #18847d;
+  background-color: rgb(255, 255, 255);
   margin: 0;
   padding: 0;
   border-radius: 0;

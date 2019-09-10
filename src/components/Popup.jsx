@@ -3,9 +3,8 @@ import React from 'react';
 class Popup extends React.Component {
 
 	sendMessage = (msg) => {
-		const iframeEl = document.getElementById('the_iframe');
 		const data = JSON.stringify(msg);
-		iframeEl.contentWindow.postMessage(data, '*');
+		window.top.postMessage(data, '*');
 	}
 
 	onClick = () => {
@@ -18,7 +17,7 @@ class Popup extends React.Component {
 			'store-phone': store.phoneFormatted
 		}
 		this.sendMessage(storeData);
-		window.parent.hideStorePicker();
+		window.location.href = 'https://buyontrust.com/';
 	}
 	
 	render() {
