@@ -9,7 +9,7 @@ export const onMapLoad = (map, stores, firstStore) => {
 
 	map.flyTo({
 		center: [firstStore[0], firstStore[1]],
-		zoom: 9
+		zoom: 11
 	});
 
 	map.addLayer({
@@ -35,7 +35,6 @@ export const onMapLoad = (map, stores, firstStore) => {
 				clickedPoint,
 				map
 			);
-			this.updateStateToCurrentStore(clickedPoint);
 		}
 	});
 

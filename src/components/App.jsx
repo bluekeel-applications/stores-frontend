@@ -7,9 +7,7 @@ import mapboxgl from 'mapbox-gl';
 
 import { token, MY_MAP_STYLE } from '../config.json';
 import { getStoreList, localDataGet, localDataSet } from '../utils-data';
-import {
-	onMapLoad
-} from '../utils-map';
+import { onMapLoad } from '../utils-map';
 
 import './App.css';
 
@@ -27,18 +25,14 @@ class App extends Component {
 		this.mapContainer = React.createRef();
 		// local storage call
 		const userLocalData = localDataGet();
-		// console.log("data from local storage");
-		// console.log(userLocalData);
 
 		this.state = {
 			zipCode: userLocalData.zipCode ? userLocalData.zipCode : '',
 			stores: [],
 			lng: 0,
 			lat: 0,
-			zoom: 8,
-			map: null,
+			zoom: 5,
 			firstStore: {},
-			currentStore: {},
 			storePicked: userLocalData.storePicked
 		};
 	}
@@ -47,43 +41,21 @@ class App extends Component {
 		const zipCode = this.state.zipCode;
 		if (zipCode !== '') { 
 			const stores = await getStoreList(zipCode);
-			this.setState({
-				firstStore: stores.features[0].geometry.coordinates,
-				stores
-			});
-			this.loadMapWithStores();
+			if(stores.features) {
+				this.setState({
+					firstStore: stores.features[0].geometry.coordinates,
+					stores
+				});
+				this.loadMapWithStores(stores);
+			}
 		};
 	}
-	
-	shouldComponentUpdate = (nextState) => {
-		return this.state.zipCode !== nextState.zipCode
-	}
 
-	componentWillUpdate = async () => {
-		const stores = await getStoreList(this.state.zipCode);
-		this.setState({
-			stores,
-			firstStore: stores.features[0].geometry.coordinates
-		});
-		this.handleZipcodeSubmit();
-	}
-
-	componentDidUpdate(prevState) {
-		if(this.state.stores !== prevState.stores) {
-			this.loadMapWithStores();
-		}
-		console.log('Component did update!')
-	}
-
-	updateStateToCurrentStore = clickedPoint => {
-		this.setState({ currentStore: clickedPoint });
-	};
-
-	loadMapWithStores = () => {
-		const {stores, firstStore, lng, lat, zoom} = this.state;
+	loadMapWithStores = (stores) => {
+		const {firstStore, lng, lat, zoom} = this.state;
 		mapboxgl.accessToken = token;
 
-		if (stores.length > 0) {
+		if (stores.features.length > 0) {
 
 			const map = new mapboxgl.Map({
 				container: this.mapContainer.current,
@@ -91,8 +63,6 @@ class App extends Component {
 				center: [lng, lat],
 				zoom
 			})
-			
-			this.setState({ map });
 
 			map.on('move', () => {
 				const { lng, lat } = map.getCenter();
@@ -106,7 +76,6 @@ class App extends Component {
 			map.on('load', () => {
 				onMapLoad(map, stores, firstStore);
 			});
-	
 		}
 	};
 
@@ -134,10 +103,10 @@ class App extends Component {
 
 	handleZipcodeInputKeyUp = e => {
 		if(e.target.value.length === 5) {
-			// set state of zipcode
 			this.setState({
 				zipCode: e.target.value
 			});
+			this.handleZipcodeSubmit(e.target.value);
 		}
 	};
 
@@ -154,21 +123,22 @@ class App extends Component {
 		// set new value of input
 		e.target.value = newContent;
 		if (newContent.length === 5) {
-			// set state of zipcode
 			this.setState({
 				zipCode: newContent
 			});
+			this.handleZipcodeSubmit(newContent);
 		}
 	};
 
-	handleZipcodeSubmit = () => {
-		console.log("zipCode stored in local storage");
-		// store the zip code in local storage
-		localDataSet("zipCode", this.state.zipCode);
+	handleZipcodeSubmit = (zipCode) => {
+		if (localDataGet('zipCode') !== zipCode) {
+			localDataSet('zipCode', zipCode)
+			setTimeout(document.location.reload(), 1000)
+		}
 	};
 
 	render() {
-		const { zipCode } = this.state;
+		const { zipCode, stores } = this.state;
 
 		return (
 			<div className="App wrapper">
@@ -189,12 +159,12 @@ class App extends Component {
 								pattern="\d*"
 								placeholder="Enter zipcode"
 								type="number"
-								value={this.state.zipCode}
+								value={zipCode}
 							/>
 						</div>
 					</Navbar>
 				</header>
-				{zipCode.length === 5 ? (
+				{stores.features ? (
 					<div
 						id="map-container"
 						style={styles}

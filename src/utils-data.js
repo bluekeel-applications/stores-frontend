@@ -5,13 +5,11 @@ const urlBase = 'https://uqayn5b2kb.execute-api.us-east-1.amazonaws.com/prod/';
 export const getStoreList = async zip => {
 	try {
 		const res = await axios.get(urlBase + zip, {
-			headers: {
-				'Access-Control-Allow-Origin': '*'
-			}
+			headers: getResponseHeaders()
 		})
 		return {
-				type: 'FeatureCollection',
-				features: res.data.stores
+			type: 'FeatureCollection',
+			features: res.data.stores
 			}
 	} catch (err) {
 		console.log('Error:', err);
