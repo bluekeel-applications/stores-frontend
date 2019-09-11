@@ -38,8 +38,7 @@ class App extends Component {
 			map: null,
 			firstStore: null,
 			currentStore: null,
-			// storePicked: localStorage.getItem('storePicked')
-			storePicked: true
+			storePicked: localStorage.getItem('storePicked')
 		};
 	}
 
@@ -51,7 +50,6 @@ class App extends Component {
 			}
 		}
 	
-
 	updateStateToCurrentStore = clickedPoint => {
 		this.setState({ currentStore: clickedPoint });
 	};
@@ -140,7 +138,10 @@ class App extends Component {
 						ref={this.mapContainer}
 					/>
 				) : (
-					'Please enter zipcode'
+					<div className="noZip">
+						Please enter a zipcode
+					</div>
+
 				)}
 			</div>
 		);

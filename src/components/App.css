@@ -11,6 +11,7 @@ body {
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
+  font-family: "Roboto Condensed",Arial,Helvetica,sans-serif!important;
 }
 
 .navbar {
@@ -97,4 +98,13 @@ body {
   max-width: 100%;
   margin: 10px;
   padding: 10px;
+}
+
+.noZip {
+  font-weight: 700;
+  color: #545454;
+  text-transform: uppercase;
+  font-size: 2rem;
+  border-bottom: 3px solid;
+  border-color: #18847d;
 }
