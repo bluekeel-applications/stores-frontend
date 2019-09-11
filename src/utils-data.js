@@ -4,7 +4,11 @@ const urlBase = 'https://uqayn5b2kb.execute-api.us-east-1.amazonaws.com/prod/';
 
 export const getStoreList = async zip => {
 	try {
-		const res = await axios.get(urlBase + zip)
+		const res = await axios.get(urlBase + zip, {
+			headers: {
+				'Access-Control-Allow-Origin': '*'
+			}
+		})
 		return {
 				type: 'FeatureCollection',
 				features: res.data.stores
@@ -42,5 +46,43 @@ export const newCurrentStore = (store) => {
 		'storePhone': store.phoneFormatted
 	};
 	sendMessage(storeData);
+};
+
+/*
+ * local storage delete
+ */
+export const localDataDelete = () => {
+	// is local storage available in this browser?
+	if (typeof Storage !== "undefined") {
+		// clear all local data
+		localStorage.removeItem("zipCode");
+	}
+};
+
+/*
+ * local storage get
+ */
+export const localDataGet = () => {
+	let localStorageData = {
+		zipCode: ""
+	};
+
+	// is local storage available in this browser?
+	if (typeof Storage !== "undefined") {
+		// grab local storage if available
+		localStorageData.zipCode = JSON.parse(localStorage.getItem("zipCode"));
+	}
+
+	return localStorageData;
+};
+
+/*
+ * local storage set
+ */
+export const localDataSet = (key, value) => {
+	// is local storage available in this browser?
+	if (typeof Storage !== "undefined") {
+		localStorage.setItem(key, JSON.stringify(value));
+	}
 };
 

@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 
 import { Navbar } from 'react-bootstrap';
-import SearchBar from './SearchBar';
-import Popup from './Popup';
+import Input from "./Input";
 
 import mapboxgl from 'mapbox-gl';
 
 import { token, MY_MAP_STYLE } from '../config.json';
-import { getStoreList } from '../utils-data';
+import { getStoreList, localDataGet, localDataSet } from '../utils-data';
 import {
-	onMapLoad,
-	flyToStore,
-	createPopUp
+	onMapLoad
 } from '../utils-map';
 
 import './App.css';
@@ -28,51 +25,74 @@ class App extends Component {
 		super(props);
 
 		this.mapContainer = React.createRef();
+		// local storage call
+		const userLocalData = localDataGet();
+		// console.log("data from local storage");
+		// console.log(userLocalData);
 
 		this.state = {
-			zip: null,
-			stores: null,
+			zipCode: userLocalData.zipCode ? userLocalData.zipCode : '',
+			stores: [],
 			lng: 0,
 			lat: 0,
 			zoom: 8,
 			map: null,
-			firstStore: null,
-			currentStore: null,
-			storePicked: localStorage.getItem('storePicked')
+			firstStore: {},
+			currentStore: {},
+			storePicked: userLocalData.storePicked
 		};
 	}
 
-	componentDidMount = () => {
-		if (this.state.storePicked) {
-				this.loadMapWithZip();
-			} else {
-				console.log('need a zipcode');
-			}
-		}
+	componentDidMount = async () => {
+		const zipCode = this.state.zipCode;
+		if (zipCode !== '') { 
+			const stores = await getStoreList(zipCode);
+			this.setState({
+				firstStore: stores.features[0].geometry.coordinates,
+				stores
+			});
+			this.loadMapWithStores();
+		};
+	}
 	
-	updateStateToCurrentStore = clickedPoint => {
-		this.setState({ currentStore: clickedPoint });
-	};
+	shouldComponentUpdate = (nextState) => {
+		return this.state.zipCode !== nextState.zipCode
+	}
 
-	loadMapWithZip = async () => {
-		const stores = await getStoreList(80121);
+	componentWillUpdate = async () => {
+		const stores = await getStoreList(this.state.zipCode);
 		this.setState({
 			stores,
 			firstStore: stores.features[0].geometry.coordinates
 		});
+		this.handleZipcodeSubmit();
+	}
 
+	componentDidUpdate(prevState) {
+		if(this.state.stores !== prevState.stores) {
+			this.loadMapWithStores();
+		}
+		console.log('Component did update!')
+	}
+
+	updateStateToCurrentStore = clickedPoint => {
+		this.setState({ currentStore: clickedPoint });
+	};
+
+	loadMapWithStores = () => {
+		const {stores, firstStore, lng, lat, zoom} = this.state;
 		mapboxgl.accessToken = token;
 
-		if (this.state.stores !== null) {
-			this.setState({
-				map: new mapboxgl.Map({
-					container: this.mapContainer.current,
-					style: MY_MAP_STYLE,
-					center: [0, 0],
-					zoom: this.state.zoom
-				})
-			});
-			const { map, stores, firstStore } = this.state;
+		if (stores.length > 0) {
+
+			const map = new mapboxgl.Map({
+				container: this.mapContainer.current,
+				style: MY_MAP_STYLE,
+				center: [lng, lat],
+				zoom
+			})
+			
+			this.setState({ map });
 
 			map.on('move', () => {
 				const { lng, lat } = map.getCenter();
@@ -83,40 +103,72 @@ class App extends Component {
 				});
 			});
 
-			map.on('load', e => {
+			map.on('load', () => {
 				onMapLoad(map, stores, firstStore);
-				map.on('click', e => {
-					const features = map.queryRenderedFeatures(e.point, {
-						layers: ['locations']
-					});
-					if (features.length) {
-						const clickedPoint = features[0];
-						flyToStore(clickedPoint, map);
-						createPopUp(
-							<Popup store={clickedPoint} />,
-							clickedPoint,
-							map
-						);
-						this.updateStateToCurrentStore(clickedPoint);
-					}
-				});
-
-				map.on('mousemove', e => {
-					const features = map.queryRenderedFeatures(e.point, {
-						layers: ['locations']
-					});
-					map.getCanvas().style.cursor = features.length
-						? 'pointer'
-						: '';
-				});
 			});
-		
-		
+	
 		}
 	};
 
+	handleZipcodeInputKeyDown = e => {
+		// this is called as soon as we get input from the user
+		// we don't want to allow them the access to input past 5 digits
+		// so we block on keyDown
+		// (it never gets to keyUp, which actually updates the state)
+
+		// restrict to 5 digits only
+		// but allow backspace and arrow
+		var key = e.which ? e.which : e.keyCode;
+		if (
+			(e.target.value.length >= 5 &&
+				key !== 8 &&
+				key !== 37 &&
+				key !== 38 &&
+				key !== 39 &&
+				key !== 40) ||
+			(key === 18 || key === 189 || key === 229)
+		) {
+			e.preventDefault();
+		}
+	};
+
+	handleZipcodeInputKeyUp = e => {
+		if(e.target.value.length === 5) {
+			// set state of zipcode
+			this.setState({
+				zipCode: e.target.value
+			});
+		}
+	};
+
+	handleZipcodeInputPaste = e => {
+		e.preventDefault();
+		// get pasted content
+		let pasteText = e.clipboardData.getData("text/plain");
+		// only allow integers
+		pasteText = pasteText.replace(/[^0-9]/g, "");
+		// add to current input value (target)
+		let newContent = e.target.value + pasteText;
+		// only allow 5 digits total
+		newContent = newContent.substring(0, 5);
+		// set new value of input
+		e.target.value = newContent;
+		if (newContent.length === 5) {
+			// set state of zipcode
+			this.setState({
+				zipCode: newContent
+			});
+		}
+	};
+
+	handleZipcodeSubmit = () => {
+		console.log("zipCode stored in local storage");
+		// store the zip code in local storage
+		localDataSet("zipCode", this.state.zipCode);
+	};
+
 	render() {
-		const { storePicked } = this.state;
+		const { zipCode } = this.state;
 
 		return (
 			<div className="App wrapper">
@@ -128,10 +180,21 @@ class App extends Component {
 							title="Buy On Trust"
 							id="logo-img"
 						/>
-						<SearchBar />
+						<div class="searchbar-div">
+							<Input
+								inputmode="numeric"
+								onKeyDown={e => this.handleZipcodeInputKeyDown(e)}
+								onKeyUp={e => this.handleZipcodeInputKeyUp(e)}
+								onPaste={e => this.handleZipcodeInputPaste(e)}
+								pattern="\d*"
+								placeholder="Enter zipcode"
+								type="number"
+								value={this.state.zipCode}
+							/>
+						</div>
 					</Navbar>
 				</header>
-				{storePicked ? (
+				{zipCode.length === 5 ? (
 					<div
 						id="map-container"
 						style={styles}
@@ -139,7 +202,7 @@ class App extends Component {
 					/>
 				) : (
 					<div className="noZip">
-						Please enter a zipcode
+						Please enter a valid zipcode
 					</div>
 
 				)}
