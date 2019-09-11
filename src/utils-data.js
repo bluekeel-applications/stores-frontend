@@ -42,6 +42,5 @@ export const newCurrentStore = (store) => {
 		'storePhone': store.phoneFormatted
 	};
 	sendMessage(storeData);
-	window.location.href = 'https://buyontrust.com/';
 };
 
