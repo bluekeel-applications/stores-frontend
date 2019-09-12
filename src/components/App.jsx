@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Navbar } from 'react-bootstrap';
+import Navbar from 'react-bootstrap/Navbar';
 import Input from "./Input";
 
 import mapboxgl from 'mapbox-gl';
@@ -12,9 +12,9 @@ import { onMapLoad } from '../utils-map';
 import './App.css';
 
 const styles = {
-	maxWidth: '100vw',
+	// width: '100vw',
 	height: '100vh',
-	margin: '5px',
+	padding: '1px',
 	flex: 1
 };
 
@@ -141,32 +141,32 @@ class App extends Component {
 		const { zipCode, stores } = this.state;
 
 		return (
-			<div className="App wrapper">
-				<header className="header">
-					<Navbar bg="light" variant="light">
+			<div className='App wrapper'>
+				<header className='header'>
+					<Navbar bg='light' variant='light'>
 						<img
-							src="https://cdn11.bigcommerce.com/s-90vdngbq7j/images/stencil/150x60/buy-on-trust-logo_1563418732__08831.original.png"
-							alt="Buy On Trust"
-							title="Buy On Trust"
-							id="logo-img"
+							src='https://cdn11.bigcommerce.com/s-90vdngbq7j/images/stencil/150x60/buy-on-trust-logo_1563418732__08831.original.png'
+							alt='Buy On Trust'
+							title='Buy On Trust'
+							id='logo-img'
 						/>
-						<div class="searchbar-div">
+						{/* <div class='Wrapper'> */}
 							<Input
-								inputmode="numeric"
+								inputmode='numeric'
 								onKeyDown={e => this.handleZipcodeInputKeyDown(e)}
 								onKeyUp={e => this.handleZipcodeInputKeyUp(e)}
 								onPaste={e => this.handleZipcodeInputPaste(e)}
-								pattern="\d*"
-								placeholder="Enter zipcode"
-								type="number"
-								value={zipCode}
+								pattern='\d*'
+								placeholder='Search'
+								type='text'
+								value={zipCode}								
 							/>
-						</div>
+						{/* </div> */}
 					</Navbar>
 				</header>
 				{stores.features ? (
 					<div
-						id="map-container"
+						id='map-container'
 						style={styles}
 						ref={this.mapContainer}
 					/>
