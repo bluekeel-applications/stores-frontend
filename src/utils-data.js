@@ -41,7 +41,12 @@ export const newCurrentStore = (store) => {
 		'storeId': store.storeId,
 		'storeName': store.longName,
 		'storeAddress': store.address,
-		'storePhone': store.phoneFormatted
+		'storeAddress2': store.address2,
+		'storeCity': store.city,
+		'storeState': store.state,
+		'storeZip': store.postalCode,
+		'storePhone': store.phone,
+		'storePhoneFormatted': store.phoneFormatted,
 	};
 	sendMessage(storeData);
 };
