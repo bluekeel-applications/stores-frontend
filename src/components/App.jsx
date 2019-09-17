@@ -165,6 +165,7 @@ class App extends Component {
 					</Navbar>
 					<div id="header-text-container">
 						<h4 id="header-text">
+							<b style={{ color: '#000000', fontSize: '2rem' }}>
 							Choose a
 							<img
 								src="https://hosted-assets-buyontrust.s3.amazonaws.com/store-picker/best-buy-logo.png"
@@ -172,7 +173,8 @@ class App extends Component {
 								title="BestBuyLogo"
 								id="bestbuy-logo"
 							/>
-							location<br/> for <em><b>fast</b></em>, in-store pickup.
+							location</b>
+							<br/> ~ for <em><b>fast</b></em>, in-store pickup ~
 						</h4>
 					</div>
 				</header>

@@ -56,7 +56,7 @@ class Input extends Component {
                     required
 				/>
                 <span class="a-field__label-wrap">
-                <span class="a-field__label">ZipCode</span>
+                <span class="a-field__label">ZIPCODE</span>
                 </span>
             </label>
              

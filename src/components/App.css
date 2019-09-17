@@ -16,17 +16,18 @@ body {
 .navbar {
   background-color: rgb(255, 255, 255);
   margin: 0;
-  /* padding: 0 0 5px 0; */
   display: flex;
   justify-content: space-between;
+  border-top: 0 solid;
   border-bottom: 3px solid;
   border-color: #18847d;
+  border-radius: 0;
 }
 
 #header-text-container {
   border-bottom: 3px solid;
   border-color: #000000;
-  padding: 10px;
+  padding: 0 10px 10px 10px;
   text-transform: uppercase;
   background-color: #17B0A3;
 }
@@ -35,7 +36,7 @@ body {
   margin: 0;
   color: #f5f5f5;
   font-weight: 500;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 #logo-img {
@@ -43,8 +44,8 @@ body {
 }
 
 #bestbuy-logo {
-  max-height: 40px;
-  padding: 0 5px;
+  max-height: 50px;
+  padding: 0 5px 0 10px;
 }
 
 .mapboxgl-popup-close-button {
