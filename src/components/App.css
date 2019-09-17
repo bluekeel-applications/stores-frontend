@@ -38,7 +38,7 @@ body {
   margin: 0;
   color: #f5f5f5;
   font-weight: 500;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
 #logo-img {
@@ -46,7 +46,7 @@ body {
 }
 
 #bestbuy-logo {
-  max-height: 50px;
+  height: 60px;
   padding: 0 5px 0 10px;
 }
 
@@ -111,6 +111,11 @@ body {
   padding: 10px;
 }
 
+#store-name {
+  color: #000000;
+  font-size: 2.5rem;
+}
+
 .noZip {
   font-weight: 700;
   color: #545454;
@@ -132,4 +137,12 @@ body {
   -webkit-transform: translate3d(0,0,0); 
   transform: translate3d(0,0,0);
   position: absolute;
+}
+
+.marker {
+  display: block;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
 }

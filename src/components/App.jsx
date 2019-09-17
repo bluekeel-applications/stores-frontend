@@ -35,7 +35,7 @@ class App extends Component {
 			zoom: 5,
 			firstStore: {},
 			storePicked: userLocalData.storePicked,
-			isLoading: true,
+			isLoading: false,
 		};
 	}
 
@@ -59,7 +59,7 @@ class App extends Component {
 		mapboxgl.accessToken = token;
 
 		if (stores.features.length > 0) {
-
+			
 			const map = new mapboxgl.Map({
 				container: this.mapContainer.current,
 				style: MY_MAP_STYLE,
@@ -76,9 +76,12 @@ class App extends Component {
 				});
 			});
 
-			map.on('load', () => {
+			map.on('load', () => {				
 				onMapLoad(map, stores, firstStore);
 			});
+		} else {
+			this.setState({ isLoading: false, zipCode: '' });
+			this.reload()
 		}
 	};
 
@@ -179,7 +182,7 @@ class App extends Component {
 							<b style={{ color: '#000000', fontSize: '2rem' }}>
 							Choose a
 							<img
-								src="https://hosted-assets-buyontrust.s3.amazonaws.com/store-picker/best-buy-logo.png"
+								src="https://hosted-assets-buyontrust.s3.amazonaws.com/store-picker/best-buy-logo-bw.png"
 								alt="BestBuyLogo"
 								title="BestBuyLogo"
 								id="bestbuy-logo"

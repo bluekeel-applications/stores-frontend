@@ -16,7 +16,7 @@ class Popup extends React.Component {
 				<h3>
 					<b>
 						<h4 class="header-subs">The</h4>
-						{store.longName}
+						<span id='store-name'>{store.longName}</span>
 						<br />
 						<h4 class="header-subs">BestBuy</h4>
 					</b>
