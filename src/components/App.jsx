@@ -141,44 +141,50 @@ class App extends Component {
 		const { zipCode, stores } = this.state;
 
 		return (
-			<div className='App wrapper'>
-				<header className='header'>
-					<Navbar bg='light' variant='light'>
+			<div className="App wrapper">
+				<header className="header">
+					<Navbar bg="light" variant="light">
 						<img
-							src='https://cdn11.bigcommerce.com/s-90vdngbq7j/images/stencil/150x60/buy-on-trust-logo_1563418732__08831.original.png'
-							alt='Buy On Trust'
-							title='Buy On Trust'
-							id='logo-img'
+							src="https://cdn11.bigcommerce.com/s-90vdngbq7j/images/stencil/150x60/buy-on-trust-logo_1563418732__08831.original.png"
+							alt="Buy On Trust"
+							title="Buy On Trust"
+							id="logo-img"
 						/>
 						{/* <div class='Wrapper'> */}
 						<Input
-							inputmode='numeric'
+							inputmode="numeric"
 							onKeyDown={e => this.handleZipcodeInputKeyDown(e)}
 							onKeyUp={e => this.handleZipcodeInputKeyUp(e)}
 							onPaste={e => this.handleZipcodeInputPaste(e)}
-							pattern='\d*'
-							placeholder='Search'
-							type='text'
+							pattern="\d*"
+							placeholder="Search"
+							type="text"
 							value={zipCode}
 						/>
 						{/* </div> */}
 					</Navbar>
-					<div id='header-text-container'>
-						<h4 id='header-text'>
-							Choose a BestBuy store for your order pickup
-							location.
+					<div id="header-text-container">
+						<h4 id="header-text">
+							Choose a
+							<img
+								src="https://hosted-assets-buyontrust.s3.amazonaws.com/store-picker/best-buy-logo.png"
+								alt="BestBuyLogo"
+								title="BestBuyLogo"
+								id="bestbuy-logo"
+							/>
+							location<br/> for <em><b>fast</b></em>, in-store pickup.
 						</h4>
 					</div>
 				</header>
 
 				{stores.features ? (
 					<div
-						id='map-container'
+						id="map-container"
 						style={styles}
 						ref={this.mapContainer}
 					/>
 				) : (
-					<div className='noZip'>Please enter your zipcode</div>
+					<div className="noZip">Please enter your zipcode</div>
 				)}
 			</div>
 		);

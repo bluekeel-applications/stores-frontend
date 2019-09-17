@@ -34,11 +34,16 @@ body {
 #header-text {
   margin: 0;
   color: #f5f5f5;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 #logo-img {
   padding: 15px 20px 10px 10px;
+}
+
+#bestbuy-logo {
+  max-height: 40px;
+  padding: 0 5px;
 }
 
 .mapboxgl-popup-close-button {
