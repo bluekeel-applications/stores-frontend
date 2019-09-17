@@ -19,6 +19,8 @@ body {
   display: flex;
   justify-content: space-between;
   border-top: 0 solid;
+  border-left: 0 solid;
+  border-right: 0 solid;
   border-bottom: 3px solid;
   border-color: #18847d;
   border-radius: 0;
