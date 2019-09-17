@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Input from "./Input";
+import Loading from './Loading';
 
 import mapboxgl from 'mapbox-gl';
 
@@ -33,7 +34,8 @@ class App extends Component {
 			lat: 0,
 			zoom: 5,
 			firstStore: {},
-			storePicked: userLocalData.storePicked
+			storePicked: userLocalData.storePicked,
+			isLoading: true,
 		};
 	}
 
@@ -44,7 +46,8 @@ class App extends Component {
 			if(stores.features) {
 				this.setState({
 					firstStore: stores.features[0].geometry.coordinates,
-					stores
+					stores,
+					isLoading: false
 				});
 				this.loadMapWithStores(stores);
 			}
@@ -137,8 +140,18 @@ class App extends Component {
 		}
 	};
 
+	contentOrLoading = () => {
+		return this.state.isLoading ? <Loading /> : (
+			<div
+				id="map-container"
+				style={styles}
+				ref={this.mapContainer}
+			/>
+		)
+	};
+
 	render() {
-		const { zipCode, stores } = this.state;
+		const { zipCode } = this.state;
 
 		return (
 			<div className="App wrapper">
@@ -150,7 +163,6 @@ class App extends Component {
 							title="Buy On Trust"
 							id="logo-img"
 						/>
-						{/* <div class='Wrapper'> */}
 						<Input
 							inputmode="numeric"
 							onKeyDown={e => this.handleZipcodeInputKeyDown(e)}
@@ -161,7 +173,6 @@ class App extends Component {
 							type="text"
 							value={zipCode}
 						/>
-						{/* </div> */}
 					</Navbar>
 					<div id="header-text-container">
 						<h4 id="header-text">
@@ -178,16 +189,9 @@ class App extends Component {
 						</h4>
 					</div>
 				</header>
-
-				{stores.features ? (
-					<div
-						id="map-container"
-						style={styles}
-						ref={this.mapContainer}
-					/>
-				) : (
-					<div className="noZip">Please enter your zipcode</div>
-				)}
+				{zipCode ? 
+				this.contentOrLoading() : 
+				(<div className="noZip">Please enter your zipcode</div>)}
 			</div>
 		);
 	}
