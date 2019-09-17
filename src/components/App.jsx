@@ -151,19 +151,26 @@ class App extends Component {
 							id='logo-img'
 						/>
 						{/* <div class='Wrapper'> */}
-							<Input
-								inputmode='numeric'
-								onKeyDown={e => this.handleZipcodeInputKeyDown(e)}
-								onKeyUp={e => this.handleZipcodeInputKeyUp(e)}
-								onPaste={e => this.handleZipcodeInputPaste(e)}
-								pattern='\d*'
-								placeholder='Search'
-								type='text'
-								value={zipCode}								
-							/>
+						<Input
+							inputmode='numeric'
+							onKeyDown={e => this.handleZipcodeInputKeyDown(e)}
+							onKeyUp={e => this.handleZipcodeInputKeyUp(e)}
+							onPaste={e => this.handleZipcodeInputPaste(e)}
+							pattern='\d*'
+							placeholder='Search'
+							type='text'
+							value={zipCode}
+						/>
 						{/* </div> */}
 					</Navbar>
+					<div id='header-text-container'>
+						<h4 id='header-text'>
+							Choose a BestBuy store for your order pickup
+							location.
+						</h4>
+					</div>
 				</header>
+
 				{stores.features ? (
 					<div
 						id='map-container'
@@ -171,10 +178,7 @@ class App extends Component {
 						ref={this.mapContainer}
 					/>
 				) : (
-					<div className="noZip">
-						Please enter a valid zipcode
-					</div>
-
+					<div className='noZip'>Please enter your zipcode</div>
 				)}
 			</div>
 		);

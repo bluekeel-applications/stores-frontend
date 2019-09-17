@@ -49,7 +49,7 @@
 
   --uiFieldPaddingRight: var(--fieldPaddingRight, 15px);
   --uiFieldPaddingBottom: var(--fieldPaddingBottom, 0);
-  --uiFieldPaddingLeft: var(--fieldPaddingLeft, 15px);   
+  --uiFieldPaddingLeft: var(--fieldPaddingLeft, 30px);   
 
   position: relative;
   box-sizing: border-box;
@@ -60,7 +60,9 @@
 .a-field__input{
   height: var(--uiFieldHeight);
   padding: 20px var(--uiFieldPaddingRight) 0 var(--uiFieldPaddingLeft);
-  border-bottom: var(--uiFieldBorderWidth) solid var(--uiFieldBorderColor);  
+  border-bottom: var(--uiFieldBorderWidth) solid var(--uiFieldBorderColor);
+  color: #13a89e;
+  font-weight: 700;  
 }
 
 .a-field__input::-webkit-input-placeholder{
@@ -130,6 +132,7 @@
 }
 
 .field{
-  --fieldBorderColor:#18847d;
-  --fieldBorderColorActive: black;
+  --fieldBorderColor:#000000;
+  --fieldBorderColorActive: #18847d;
+  margin-bottom: 10px;
 }
