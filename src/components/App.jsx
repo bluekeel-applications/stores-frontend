@@ -34,7 +34,7 @@ class App extends Component {
 			zoom: 5,
 			firstStore: {},
 			storePicked: userLocalData.storePicked,
-			isLoading: false,
+			isLoading: true,
 		};
 	}
 
@@ -42,6 +42,14 @@ class App extends Component {
 		const zipCode = this.state.zipCode;
 		if (zipCode !== '') { 
 			const stores = await getStoreList(zipCode);
+			
+			if(stores.statusCode === 500) {
+				console.log('invalid zipcode');
+				this.setState({isLoading: false, zipCode: ''});
+				const input = document.getElementById('zipInput')
+				input.value = '';
+				input.focus();
+			}
 			if(stores.features) {
 				this.setState({
 					firstStore: stores.features[0].geometry.coordinates,
@@ -79,9 +87,11 @@ class App extends Component {
 
 			map.on('load', () => {				
 				onMapLoad(map, stores, firstStore);
+				this.setState({ isLoading: false });
 			});
 		} else {
 			this.setState({ isLoading: false, zipCode: '' });
+			document.location.reload();
 		}
 	};
 
@@ -138,18 +148,25 @@ class App extends Component {
 
 	handleZipcodeSubmit = (zipCode) => {
 		if (localDataGet('zipCode') !== zipCode) {
-			localDataSet('zipCode', zipCode)
-			setTimeout(document.location.reload(), 1000)
+			localDataSet('zipCode', zipCode);
+			document.location.reload();
 		}
 	};
 
 	handleZipcodeInputFocus = (e) => {
 		e.target.value = '';
-		console.log('input focus');
 	}
 
 	contentOrLoading = () => {
-		return this.state.isLoading ? <Loading /> : (
+		return this.state.isLoading ? (
+		<Loading>
+			<div
+				id="map-container"
+				style={styles}
+				ref={this.mapContainer}
+			/>
+		</Loading>
+		) : (
 			<div
 				id="map-container"
 				style={styles}
