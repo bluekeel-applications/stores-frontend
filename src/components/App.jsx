@@ -29,9 +29,9 @@ class App extends Component {
 		this.state = {
 			zipCode: userLocalData.zipCode ? userLocalData.zipCode : '',
 			stores: [],
-			lng: 0,
-			lat: 0,
-			zoom: 5,
+			lat: 39.7392,
+			lng: 104.9903,
+			zoom: 0,
 			firstStore: {},
 			storePicked: userLocalData.storePicked,
 			isLoading: true,
@@ -46,7 +46,7 @@ class App extends Component {
 			if(stores.statusCode === 500) {
 				console.log('invalid zipcode');
 				this.setState({isLoading: false, zipCode: ''});
-				const input = document.getElementById('zipInput')
+				const input = document.getElementById('zipInput');
 				input.value = '';
 				input.focus();
 			}
@@ -179,51 +179,51 @@ class App extends Component {
 		const { zipCode } = this.state;
 
 		return (
-			<div className="App wrapper">
-				<header className="header">
-					<Navbar bg="light" variant="light">
+			<div className='App wrapper'>
+				<header className='header'>
+					<Navbar bg='light' variant='light'>
 						<img
-							src="https://cdn11.bigcommerce.com/s-90vdngbq7j/images/stencil/150x60/buy-on-trust-logo_1563418732__08831.original.png"
-							alt="Buy On Trust"
-							title="Buy On Trust"
-							id="logo-img"
+							src='https://cdn11.bigcommerce.com/s-90vdngbq7j/images/stencil/150x60/buy-on-trust-logo_1563418732__08831.original.png'
+							alt='Buy On Trust'
+							title='Buy On Trust'
+							id='logo-img'
 						/>
 						<Input
-							inputmode="numeric"
+							inputmode='numeric'
 							onKeyDown={e => this.handleZipcodeInputKeyDown(e)}
 							onKeyUp={e => this.handleZipcodeInputKeyUp(e)}
 							onPaste={e => this.handleZipcodeInputPaste(e)}
 							onFocus={e => this.handleZipcodeInputFocus(e)}
-							pattern="\d*"
-							placeholder="Search"
-							type="text"
+							pattern='\d*'
+							placeholder='Search'
+							type='text'
 							value={zipCode}
 						/>
 					</Navbar>
-					<div id="header-text-container">
-						<h4 id="header-text">
-							<b style={{ color: '#000000', fontSize: '2rem' }}>
+					<div id='header-text-container'>
+						<h4 id='header-text'>
+							<b id='header-title-text'>
 								Choose a
 								<img
-									src="https://hosted-assets-buyontrust.s3.amazonaws.com/store-picker/bb-logo-new.png"
-									alt="BestBuyLogo"
-									title="BestBuyLogo"
-									id="bestbuy-logo"
+									src='https://cdn11.bigcommerce.com/s-90vdngbq7j/product_images/uploaded_images/best-buy-long.png?t=1563947370&_ga=2.146970548.283135744.1568641630-1600106569.1568150597'
+									alt='BestBuyLogo'
+									title='BestBuyLogo'
+									id='bestbuy-logo'
 								/>
 								location
 							</b>
-							<br /> ~ for{' '}
+							<br />for{' '}
 							<em>
 								<b>fast</b>
 							</em>
-							, in-store pickup ~
+							, in-store pickup
 						</h4>
 					</div>
 				</header>
 				{zipCode ? (
 					this.contentOrLoading()
 				) : (
-					<div className="noZip">Please enter your zipcode</div>
+					<div className="noZip">Please enter a zipcode above</div>
 				)}
 			</div>
 		);

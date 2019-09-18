@@ -5,7 +5,7 @@ import Popup from './components/Popup';
 
 export const onMapLoad = (map, stores, firstStore) => {
 	map.loadImage(
-		'https://cors-anywhere.herokuapp.com/https://hosted-assets-buyontrust.s3.amazonaws.com/store-picker/bb-logo-new.png',
+		'https://cdn11.bigcommerce.com/s-90vdngbq7j/product_images/uploaded_images/bb-logo-small.png?t=1568832941&_ga=2.159635390.283135744.1568641630-1600106569.1568150597',
 		(error, image) => {
 			if (error) throw error;
 
@@ -24,6 +24,7 @@ export const onMapLoad = (map, stores, firstStore) => {
 				type: 'symbol',
 				source: {
 					type: 'geojson',
+					buffer: 0,
 					data: stores
 				},
 				layout: {
