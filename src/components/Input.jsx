@@ -24,8 +24,8 @@ class Input extends Component {
         return (
 			<label class="field a-field a-field_a1">
 				<input
-					id='zipInput'
-					className='field__input a-field__input'
+					id="zipInput"
+					className="field__input a-field__input"
 					inputMode={this.props.inputmode}
 					max={this.props.max}
 					min={this.props.min}
@@ -49,17 +49,21 @@ class Input extends Component {
 							? ''
 							: this.props.onPaste(e);
 					}}
+					onFocus={e => {
+						return this.props.onFocus === ''
+							? ''
+							: this.props.onFocus(e);
+					}}
 					pattern={this.props.pattern}
 					placeholder={this.props.placeholder}
 					type={this.props.type}
-                    defaultValue={this.props.value}
-                    required
+					defaultValue={this.props.value}
+					required
 				/>
-                <span class="a-field__label-wrap">
-                <span class="a-field__label">ZIPCODE</span>
-                </span>
-            </label>
-             
+				<span class="a-field__label-wrap">
+					<span class="a-field__label">ZIPCODE</span>
+				</span>
+			</label>
 		);
     }
 }

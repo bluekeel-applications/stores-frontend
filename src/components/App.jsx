@@ -13,7 +13,6 @@ import { onMapLoad } from '../utils-map';
 import './App.css';
 
 const styles = {
-	// width: '100vw',
 	height: '100vh',
 	padding: '1px',
 	flex: 1
@@ -144,6 +143,11 @@ class App extends Component {
 		}
 	};
 
+	handleZipcodeInputFocus = (e) => {
+		e.target.value = '';
+		console.log('input focus');
+	}
+
 	contentOrLoading = () => {
 		return this.state.isLoading ? <Loading /> : (
 			<div
@@ -172,6 +176,7 @@ class App extends Component {
 							onKeyDown={e => this.handleZipcodeInputKeyDown(e)}
 							onKeyUp={e => this.handleZipcodeInputKeyUp(e)}
 							onPaste={e => this.handleZipcodeInputPaste(e)}
+							onFocus={e => this.handleZipcodeInputFocus(e)}
 							pattern="\d*"
 							placeholder="Search"
 							type="text"
