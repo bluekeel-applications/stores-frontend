@@ -51,6 +51,8 @@ class App extends Component {
 				});
 				this.loadMapWithStores(stores);
 			}
+		} else {
+			document.getElementById('zipInput').focus();
 		};
 	}
 
@@ -81,7 +83,6 @@ class App extends Component {
 			});
 		} else {
 			this.setState({ isLoading: false, zipCode: '' });
-			this.reload()
 		}
 	};
 
@@ -180,21 +181,28 @@ class App extends Component {
 					<div id="header-text-container">
 						<h4 id="header-text">
 							<b style={{ color: '#000000', fontSize: '2rem' }}>
-							Choose a
-							<img
-								src="https://hosted-assets-buyontrust.s3.amazonaws.com/store-picker/best-buy-logo-bw.png"
-								alt="BestBuyLogo"
-								title="BestBuyLogo"
-								id="bestbuy-logo"
-							/>
-							location</b>
-							<br/> ~ for <em><b>fast</b></em>, in-store pickup ~
+								Choose a
+								<img
+									src="https://hosted-assets-buyontrust.s3.amazonaws.com/store-picker/bb-logo-new.png"
+									alt="BestBuyLogo"
+									title="BestBuyLogo"
+									id="bestbuy-logo"
+								/>
+								location
+							</b>
+							<br /> ~ for{' '}
+							<em>
+								<b>fast</b>
+							</em>
+							, in-store pickup ~
 						</h4>
 					</div>
 				</header>
-				{zipCode ? 
-				this.contentOrLoading() : 
-				(<div className="noZip">Please enter your zipcode</div>)}
+				{zipCode ? (
+					this.contentOrLoading()
+				) : (
+					<div className="noZip">Please enter your zipcode</div>
+				)}
 			</div>
 		);
 	}

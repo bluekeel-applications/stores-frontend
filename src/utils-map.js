@@ -4,55 +4,58 @@ import ReactDOM from 'react-dom';
 import Popup from './components/Popup';
 
 export const onMapLoad = (map, stores, firstStore) => {
-	map.loadImage('https://cors-anywhere.herokuapp.com/https://hosted-assets-buyontrust.s3.amazonaws.com/store-picker/best-buy-small.png', (error, image) => {
-		if (error) throw error;
+	map.loadImage(
+		'https://cors-anywhere.herokuapp.com/https://hosted-assets-buyontrust.s3.amazonaws.com/store-picker/bb-logo-new.png',
+		(error, image) => {
+			if (error) throw error;
 
-		map.addImage('BB-logo', image);
-		const nav = new mapboxgl.NavigationControl();
+			map.addImage('BB-logo', image);
+			const nav = new mapboxgl.NavigationControl();
 
-		map.addControl(nav, 'top-right');
+			map.addControl(nav, 'top-right');
 
-		map.flyTo({
-			center: [firstStore[0], firstStore[1]],
-			zoom: 11
-		});
-
-		map.addLayer({
-			id: 'locations',
-			type: 'symbol',
-			source: {
-				type: 'geojson',
-				data: stores
-			},
-			layout: {
-				'icon-image': 'BB-logo',
-				'icon-size': 0.75,
-				'icon-allow-overlap': true
-			}
-		});
-
-		map.on('click', e => {
-			const features = map.queryRenderedFeatures(e.point, { layers: ['locations'] });
-			if (features.length) {
-				const clickedPoint = features[0];
-				flyToStore(clickedPoint, map);
-				createPopUp(
-					<Popup store={clickedPoint} />,
-					clickedPoint,
-					map
-				);
-			}
-		});
-
-		map.on('mousemove', e => {
-			const features = map.queryRenderedFeatures(e.point, {
-				layers: ['locations']
+			map.flyTo({
+				center: [firstStore[0], firstStore[1]],
+				zoom: 11
 			});
-			map.getCanvas().style.cursor = features.length
-				? 'pointer'
-				: '';
-		});
-	});
+
+			map.addLayer({
+				id: 'locations',
+				type: 'symbol',
+				source: {
+					type: 'geojson',
+					data: stores
+				},
+				layout: {
+					'icon-image': 'BB-logo',
+					'icon-size': 0.35,
+					'icon-allow-overlap': true
+				}
+			});
+
+			map.on('click', e => {
+				const features = map.queryRenderedFeatures(e.point, {
+					layers: ['locations']
+				});
+				if (features.length) {
+					const clickedPoint = features[0];
+					flyToStore(clickedPoint, map);
+					createPopUp(
+						<Popup store={clickedPoint} />,
+						clickedPoint,
+						map
+					);
+				}
+			});
+
+			map.on('mousemove', e => {
+				const features = map.queryRenderedFeatures(e.point, {
+					layers: ['locations']
+				});
+				map.getCanvas().style.cursor = features.length ? 'pointer' : '';
+			});
+		}
+	);
 };
 
 export const flyToStore = (clickedPoint, map) => {
