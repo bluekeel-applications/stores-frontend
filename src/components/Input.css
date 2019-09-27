@@ -12,7 +12,7 @@
 
   font-family: inherit;
   font-weight: 400;
-  font-size: 1em;
+  font-size: 2.5rem;
 }
 
 .field__input:focus::-webkit-input-placeholder{
@@ -44,17 +44,22 @@
   --uiFieldBorderWidth: var(--fieldBorderWidth, 2px);
   --uiFieldBorderColor: var(--fieldBorderColor);
 
-  --uiFieldFontSize: var(--fieldFontSize, 1.5em);
-  --uiFieldHintFontSize: var(--fieldHintFontSize, 0.5em);
+  --uiFieldFontSize: var(--fieldFontSize, 1.6em);
+  --uiFieldHintFontSize: var(--fieldHintFontSize, 0.4em);
 
   --uiFieldPaddingRight: var(--fieldPaddingRight, 15px);
   --uiFieldPaddingBottom: var(--fieldPaddingBottom, 0);
-  --uiFieldPaddingLeft: var(--fieldPaddingLeft, 30px);   
+  --uiFieldPaddingLeft: var(--fieldPaddingLeft, 60px);   
 
   position: relative;
   box-sizing: border-box;
   font-size: var(--uiFieldFontSize);
   padding-top: 5px;  
+}
+
+.a-field_a1 .a-field__input {
+  font-size: 2.1rem;
+  font-weight: 400;
 }
 
 .a-field__input{
@@ -106,9 +111,9 @@
 .a-field__label{
   position: absolute;
   left: var(--uiFieldPaddingLeft);
-  bottom: calc(50% - .5em);
+  bottom: calc(50% - 1.5em);
 
-  line-height: 1;
+  line-height: 2;
   font-size: var(--uiFieldHintFontSize);
 
   pointer-events: none;

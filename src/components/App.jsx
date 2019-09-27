@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 
 import Navbar from 'react-bootstrap/Navbar';
-import Input from "./Input";
+import NoZip from './NoZip';
 import Loading from './Loading';
-
+import Input from './Input';
 import mapboxgl from 'mapbox-gl';
 
 import { token, MY_MAP_STYLE } from '../config.json';
@@ -175,30 +175,36 @@ class App extends Component {
 		)
 	};
 
+	topInputOrNot = () => {
+		const { zipCode } = this.state;
+		return zipCode !== '' ? 
+			<Input
+				inputmode='numeric'
+				onKeyDown={e => this.handleZipcodeInputKeyDown(e)}
+				onKeyUp={e => this.handleZipcodeInputKeyUp(e)}
+				onPaste={e => this.handleZipcodeInputPaste(e)}
+				onFocus={e => this.handleZipcodeInputFocus(e)}
+				pattern='\d*'
+				placeholder='Search'
+				type='text'
+				value={zipCode}
+			/> : null;
+	}
+
 	render() {
 		const { zipCode } = this.state;
 
 		return (
 			<div className='App wrapper'>
 				<header className='header'>
-					<Navbar bg='light' variant='light'>
+					<Navbar className='header-top-nav' bg='light' variant='light'>
 						<img
 							src='https://cdn11.bigcommerce.com/s-90vdngbq7j/images/stencil/150x60/buy-on-trust-logo_1563418732__08831.original.png'
 							alt='Buy On Trust'
 							title='Buy On Trust'
 							id='logo-img'
 						/>
-						<Input
-							inputmode='numeric'
-							onKeyDown={e => this.handleZipcodeInputKeyDown(e)}
-							onKeyUp={e => this.handleZipcodeInputKeyUp(e)}
-							onPaste={e => this.handleZipcodeInputPaste(e)}
-							onFocus={e => this.handleZipcodeInputFocus(e)}
-							pattern='\d*'
-							placeholder='Search'
-							type='text'
-							value={zipCode}
-						/>
+						{this.topInputOrNot()}
 					</Navbar>
 					<div id='header-text-container'>
 						<h4 id='header-text'>
@@ -223,7 +229,17 @@ class App extends Component {
 				{zipCode ? (
 					this.contentOrLoading()
 				) : (
-					<div className="noZip">Please enter a zipcode above</div>
+					<NoZip 
+						inputmode='numeric'
+						onKeyDown={e => this.handleZipcodeInputKeyDown(e)}
+						onKeyUp={e => this.handleZipcodeInputKeyUp(e)}
+						onPaste={e => this.handleZipcodeInputPaste(e)}
+						onFocus={e => this.handleZipcodeInputFocus(e)}
+						pattern='\d*'
+						placeholder='Search'
+						type='text'
+						value={zipCode}
+					/>
 				)}
 			</div>
 		);
