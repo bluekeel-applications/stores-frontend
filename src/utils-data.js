@@ -48,6 +48,7 @@ export const newCurrentStore = (store) => {
 		'storePhone': store.phone,
 		'storePhoneFormatted': store.phoneFormatted,
 	};
+	localDataDelete();
 	sendMessage(storeData);
 };
 

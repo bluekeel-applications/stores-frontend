@@ -63,7 +63,7 @@ export const flyToStore = (clickedPoint, map) => {
 	const coordinates = clickedPoint.geometry.coordinates;
 	map.flyTo({
 		center: [coordinates[0], coordinates[1]],
-		zoom: 13
+		zoom: 11
 	});
 };
 
